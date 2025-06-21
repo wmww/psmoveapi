@@ -512,6 +512,20 @@ ADDAPI bool
 ADDCALL psmove_pair_custom(PSMove *move, const char *new_host_string);
 
 /**
+ * \brief Add an entry for a controller paired on another host.
+ *
+ * This function behaves the same as psmove_host_pair_custom() but allows you
+ * to specify a controller hardware model and also a custom Bluetooth host address.
+ *
+ * \param addr The Bluetooth address of the PS move to add
+ * \param model The hardware model type of the controller
+ * \param host The host address in the format \c "aa:bb:cc:dd:ee:ff"
+ **/
+ADDAPI bool
+ADDCALL psmove_pair_custom_model_to_custom_host(const char *addr,
+        enum PSMove_Model_Type model, const char *host);
+
+/**
  * \brief Enable or disable LED update rate limiting.
  *
  * If LED update rate limiting is enabled, psmove_update_leds() will make

@@ -1228,6 +1228,18 @@ psmove_pair_custom(PSMove *move, const char *new_host_string)
     return result;
 }
 
+ADDAPI bool
+ADDCALL psmove_pair_custom_model_to_custom_host(const char *caddr,
+        enum PSMove_Model_Type model, const char *chost)
+{
+    char *addr = strdup(caddr);
+    char *host = strdup(chost);
+    bool result = psmove_port_register_psmove(addr, host, model);
+    psmove_free_mem(addr);
+    psmove_free_mem(host);
+    return result;
+}
+
 enum PSMove_Connection_Type
 psmove_connection_type(PSMove *move)
 {

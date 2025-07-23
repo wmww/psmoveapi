@@ -126,10 +126,11 @@ struct BluetoothDaemon {
     void force_restart() { stop(); start(); }
 
 private:
-    bool started { false };
+    bool runnng { system("systemctl is-active --quiet bluetooth.service") == 0 };
     bool stopped { false };
 
     void control(bool start) {
+        if (start == runnng) return;
         std::list<std::string> services = { "bluetooth.service" };
         std::string verb { start ? "start" : "stop" };
 
@@ -143,7 +144,7 @@ private:
         }
 
         stopped = !start;
-        started = start;
+        runnng = start;
     }
 };
 

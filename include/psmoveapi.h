@@ -83,6 +83,9 @@ ADDAPI void
 ADDCALL psmoveapi_update();
 
 ADDAPI void
+ADDCALL psmoveapi_pair_controller(struct Controller *controller, const char *optional_host);
+
+ADDAPI void
 ADDCALL psmoveapi_quit();
 
 #ifdef __cplusplus

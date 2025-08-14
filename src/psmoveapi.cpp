@@ -49,6 +49,7 @@ struct ControllerGlue {
 
     void add_handle(PSMove *handle);
     void update_connection_flags();
+    void pair(const char *optional_host);
 
     ControllerGlue(const ControllerGlue &other) = delete;
     Controller &operator=(const ControllerGlue &other) = delete;
@@ -127,6 +128,18 @@ ControllerGlue::update_connection_flags()
     }
 
     connected = (controller.usb || controller.bluetooth);
+}
+
+void
+ControllerGlue::pair(const char *optional_host)
+{
+    if (move_usb) {
+        if (optional_host) {
+            psmove_pair_custom(move_usb, optional_host);
+        } else {
+            psmove_pair(move_usb);
+        }
+    }
 }
 
 ControllerGlue::~ControllerGlue()
@@ -385,6 +398,13 @@ psmoveapi_update()
 {
     if (g_psmove_api != nullptr) {
         g_psmove_api->update();
+    }
+}
+
+void psmoveapi_pair_controller(struct Controller *controller, const char *optional_host)
+{
+    if (g_psmove_api != nullptr) {
+        g_psmove_api->controllers[controller->index]->pair(optional_host);
     }
 }
 

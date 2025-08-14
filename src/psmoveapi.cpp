@@ -49,6 +49,7 @@ struct ControllerGlue {
 
     void add_handle(PSMove *handle);
     void update_connection_flags();
+    void pair(const char *optional_host);
 
     ControllerGlue(const ControllerGlue &other) = delete;
     Controller &operator=(const ControllerGlue &other) = delete;
@@ -127,6 +128,27 @@ ControllerGlue::update_connection_flags()
     }
 
     connected = (controller.usb || controller.bluetooth);
+}
+
+void
+ControllerGlue::pair(const char *host)
+{
+    char* owned_host = nullptr;
+    if (!host) {
+        owned_host = psmove_port_get_host_bluetooth_address();
+        host = owned_host;
+    }
+    if (move_usb) {
+        // The USB-specific function is required if the controller does not know about the computer yet
+        psmove_pair_custom(move_usb, host);
+    } else if (move_bluetooth) {
+        // If it's not connected over USB this may work, if the controller has been paired before
+        PSMove_Model_Type model = psmove_get_model(move_bluetooth);
+        char* serial = psmove_get_serial(move_bluetooth);
+        psmove_pair_custom_model_to_custom_host(serial, model, host);
+        psmove_free_mem(serial);
+    }
+    psmove_free_mem(owned_host);
 }
 
 ControllerGlue::~ControllerGlue()
@@ -385,6 +407,13 @@ psmoveapi_update()
 {
     if (g_psmove_api != nullptr) {
         g_psmove_api->update();
+    }
+}
+
+void psmoveapi_pair_controller(struct Controller *controller, const char *optional_host)
+{
+    if (g_psmove_api != nullptr) {
+        g_psmove_api->controllers[controller->index]->pair(optional_host);
     }
 }
 

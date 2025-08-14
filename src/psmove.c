@@ -916,7 +916,7 @@ psmove_connect()
 int
 _psmove_read_btaddrs(PSMove *move, PSMove_Data_BTAddr *host, PSMove_Data_BTAddr *controller)
 {
-    unsigned char btg[PSMOVE_MAX_BTADDR_GET_SIZE];
+    unsigned char btg[PSMOVE_MAX_BTADDR_GET_SIZE] = {0};
     size_t report_size = PSMOVE_BTADDR_GET_SIZE;
     int res;
 

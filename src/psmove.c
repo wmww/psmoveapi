@@ -565,7 +565,9 @@ psmove_connect_internal(const wchar_t *serial, const char *path, int id, unsigne
         if (move->connection_type == Conn_Unknown) {
             move->connection_type = Conn_USB;
         }
-        move->serial_number = psmove_get_serial(move);
+        char* new_serial = psmove_get_serial(move);
+        free(move->serial_number);
+        move->serial_number = new_serial;
     }
 
     // Recently disconnected controllers might still show up in hidapi (especially Windows).

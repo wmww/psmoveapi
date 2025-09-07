@@ -158,6 +158,7 @@ PSMoveAPI::PSMoveAPI(EventReceiver *receiver, void *user_data)
     , controllers()
     , monitor(nullptr)
 {
+    fprintf(stderr, "[START] PSMoveAPI::PSMoveAPI()\n");
     std::map<std::string, std::vector<PSMove *>> moves;
 
     int n = psmove_count_connected();
@@ -192,6 +193,7 @@ PSMoveAPI::PSMoveAPI(EventReceiver *receiver, void *user_data)
 #ifndef _WIN32
     monitor = moved_monitor_new(PSMoveAPI::on_monitor_event, this);
 #endif
+    fprintf(stderr, "[END] PSMoveAPI::PSMoveAPI()\n");
 }
 
 PSMoveAPI::~PSMoveAPI()

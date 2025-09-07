@@ -806,6 +806,7 @@ static struct hid_device_info *move_hid_devices[NUM_PSMOVE_PIDS];
 PSMove *
 psmove_connect_by_id(int id)
 {
+    fprintf(stderr, "[START] psmove_connect_by_id()\n");
     int hidapi_count = psmove_count_connected_hidapi();
 
     if (id >= hidapi_count) {
@@ -821,11 +822,13 @@ psmove_connect_by_id(int id)
             int count = psmove_count_connected_moved(cur->client);
             if ((id - offset) < count) {
                 int remote_id = id - offset;
+                fprintf(stderr, "[EARLY END] psmove_connect_by_id()\n");
                 return psmove_connect_remote_by_id(id, cur->client, remote_id);
             }
             offset += count;
         }
 
+        fprintf(stderr, "[EARLY END] psmove_connect_by_id()\n");
         return NULL;
     }
 
@@ -905,6 +908,7 @@ psmove_connect_by_id(int id)
         }
     }
 
+    fprintf(stderr, "[END] psmove_connect_by_id()\n");
     return move;
 }
 

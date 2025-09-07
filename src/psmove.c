@@ -412,10 +412,13 @@ psmove_reinit()
 static int
 _psmove_count_connected_by_pid(int pid)
 {
+    fprintf(stderr, "[START] _psmove_count_connected_by_pid()\n");
     struct hid_device_info *devs, *cur_dev;
     int count = 0;
 
+    fprintf(stderr, "[START, outer] hid_enumerate()\n");
     devs = hid_enumerate(PSMOVE_VID, pid);
+    fprintf(stderr, "[END, outer] hid_enumerate()\n");
     cur_dev = devs;
     while (cur_dev) {
 #ifdef _WIN32
@@ -433,6 +436,7 @@ _psmove_count_connected_by_pid(int pid)
     }
     hid_free_enumeration(devs);
 
+    fprintf(stderr, "[END] _psmove_count_connected_by_pid()\n");
     return count;
 }
 

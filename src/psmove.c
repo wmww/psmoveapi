@@ -467,6 +467,7 @@ psmove_count_connected_moved(moved_client *client)
 int
 psmove_count_connected()
 {
+    fprintf(stderr, "[START] psmove_count_connected()\n");
     int count = psmove_count_connected_hidapi();
 
     if (clients == NULL && !psmove_remote_disabled) {
@@ -478,6 +479,7 @@ psmove_count_connected()
         count += psmove_count_connected_moved(cur->client);
     }
 
+    fprintf(stderr, "[END] psmove_count_connected()\n");
     return count;
 }
 

@@ -129,6 +129,7 @@ static wchar_t *utf8_to_wchar_t(const char *utf8)
 void
 _moved_monitor_handle_device(moved_monitor *monitor, struct udev_device *dev)
 {
+    fprintf(stderr, "[START] _moved_monitor_handle_device()\n");
     const char *action = udev_device_get_action(dev);
     const char *path = udev_device_get_devnode(dev);
     enum MonitorEventDeviceType device_type = EVENT_DEVICE_TYPE_UNKNOWN;
@@ -172,11 +173,13 @@ _moved_monitor_handle_device(moved_monitor *monitor, struct udev_device *dev)
         monitor->event_callback(EVENT_DEVICE_REMOVED, device_type, path,
                 NULL, 0, monitor->event_callback_user_data);
     }
+    fprintf(stderr, "[END] _moved_monitor_handle_device()\n");
 }
 
 moved_monitor *
 moved_monitor_new(moved_event_callback callback, void *user_data)
 {
+    fprintf(stderr, "[START] moved_monitor_new()\n");
     moved_monitor *monitor = calloc(1, sizeof(moved_monitor));
 
     monitor->udev_handle = udev_new();
@@ -189,6 +192,7 @@ moved_monitor_new(moved_event_callback callback, void *user_data)
     udev_monitor_filter_add_match_subsystem_devtype(monitor->udev_monitor,
             "hidraw", NULL);
     udev_monitor_enable_receiving(monitor->udev_monitor);
+    fprintf(stderr, "[END] moved_monitor_new()\n");
 
     return monitor;
 }
@@ -204,6 +208,7 @@ moved_monitor_get_fd(moved_monitor *monitor)
 void
 moved_monitor_poll(moved_monitor *monitor)
 {
+    fprintf(stderr, "[START] moved_monitor_poll()\n");
     psmove_return_if_fail(monitor != NULL);
 
     struct udev_device *device = udev_monitor_receive_device(
@@ -213,6 +218,7 @@ moved_monitor_poll(moved_monitor *monitor)
         _moved_monitor_handle_device(monitor, device);
         udev_device_unref(device);
     }
+    fprintf(stderr, "[END] moved_monitor_poll()\n");
 }
 
 void

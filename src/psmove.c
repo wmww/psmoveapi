@@ -439,9 +439,11 @@ _psmove_count_connected_by_pid(int pid)
 int
 psmove_count_connected_hidapi()
 {
+    fprintf(stderr, "[START] psmove_count_connected_hidapi()\n");
     int count = 0;
 
     if (psmove_local_disabled) {
+        fprintf(stderr, "[END] psmove_count_connected_hidapi()\n");
         return 0;
     }
 
@@ -450,17 +452,21 @@ psmove_count_connected_hidapi()
         count += _psmove_count_connected_by_pid(*pid++);
     }
 
+    fprintf(stderr, "[END] psmove_count_connected_hidapi()\n");
     return count;
 }
 
 int
 psmove_count_connected_moved(moved_client *client)
 {
+    fprintf(stderr, "[START] psmove_count_connected_moved()\n");
     psmove_return_val_if_fail(client != NULL, 0);
     if (moved_client_send(client, MOVED_REQ_COUNT_CONNECTED, 0, NULL, 0)) {
+        fprintf(stderr, "[END] psmove_count_connected_moved()\n");
         return client->response_buf.count_connected.count;
     }
 
+    fprintf(stderr, "[END] psmove_count_connected_moved()\n");
     return 0;
 }
 
